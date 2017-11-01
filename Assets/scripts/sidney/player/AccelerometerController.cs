@@ -33,7 +33,7 @@ public class AccelerometerController : MonoBehaviour {
 	
 	void Update () {
         if (!port.IsOpen) {
-            print("port [" + port.PortName + "] is not open");
+            //print("port [" + port.PortName + "] is not open");
             return;
         }
 

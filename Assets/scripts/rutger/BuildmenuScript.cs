@@ -19,6 +19,7 @@ public class BuildmenuScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+        /*
 		if (playerRaycaster.mousedown) {
 			if (currentObjHor != playerRaycaster.currentObjHor) {
 				currentObjHor = playerRaycaster.currentObjHor;
@@ -57,6 +58,7 @@ public class BuildmenuScript : MonoBehaviour {
 			if (this.gameObject.transform.position.x > Screen.width/2 - Screen.width/10)
 				this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x  - 5, this.gameObject.transform.position.y, 0 );
 		}
+        */
 	}
 	void showImages(bool enable) {
 		children = transform.childCount;

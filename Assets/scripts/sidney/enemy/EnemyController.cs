@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour {
     public float maxHealth = 40F;
     public float hitDelay = 0.7F;
 
+    [Header("Spawn Config")]
+    public float spawnChange = 100;
+
 
 
     // movement vars
@@ -24,6 +27,8 @@ public class EnemyController : MonoBehaviour {
     // health vars
     private float currentHealth = 0F;
     private float hitTimer = 0F;
+
+    private bool dead = false;
 
     void Start () {
         // get objects and components
@@ -74,7 +79,6 @@ public class EnemyController : MonoBehaviour {
     // bullet trigger
     private void OnTriggerEnter(Collider col){
         if (col.CompareTag("Bullet") && hitTimer <= Time.time) {
-            print("hit");
             hitTimer = hitDelay + Time.time;
             this.removeHealth(col.GetComponent<BulletController>().getDamage());
         }
@@ -88,6 +92,7 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
+    // set health
     public void setHealth(float _amount){
         currentHealth = _amount;
         if (currentHealth < 0) {
@@ -98,21 +103,63 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
+    // remove health
     public void removeHealth(float _amount){
         currentHealth -= _amount;
+        
+        GameObject[] bodyparts = this.getBodyParts();
+        for (int i = 0; i < bodyparts.Length; i++){
+            bodyparts[i].GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+
         if (currentHealth < 0) {
             currentHealth = 0;
-            this.kill();
+            this.expload();
         }
     }
 
+    // get current helth
     public float getCurrentHealth() {
         return currentHealth;
     }
 
-    // if enemy dead
+    // kill enemy
     public void kill() {
+        dead = true;
+    }
+
+    // destroy enemy
+    public void destroy() {
         Destroy(this.gameObject);
+    }
+
+    // get if enemy is dead
+    public bool isDead() {
+        return dead;
+    }
+
+    // make enemy expload
+    public void expload() {
+        GameObject[] bodyparts = this.getBodyParts(); ;
+
+        for (int i = 0; i < bodyparts.Length; i++){
+            bodyparts[i].AddComponent<BoxCollider>();
+            bodyparts[i].AddComponent<Rigidbody>();
+            bodyparts[i].GetComponent<Rigidbody>().AddExplosionForce(4, this.transform.position, 4, 2, ForceMode.Impulse);
+            bodyparts[i].transform.SetParent(this.transform.parent);
+        }
+
+        this.kill();
+    }
+
+    public GameObject[] getBodyParts() {
+        GameObject animal = this.transform.GetChild(0).gameObject;
+        int childcount = animal.transform.childCount;
+        GameObject[] bodyparts = new GameObject[childcount];
+        for (int i = 0; i < childcount; i++){
+            bodyparts[i] = animal.transform.GetChild(i).gameObject;
+        }
+        return bodyparts;
     }
 
 }

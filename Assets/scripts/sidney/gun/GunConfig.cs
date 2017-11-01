@@ -8,6 +8,7 @@ public class GunConfig : MonoBehaviour {
     public float maxClipAmmo = 0;
     public float reloadTime = 0;
     public float damage = 0;
+    public float fireRate = 0;
 
     public Transform barrel = null;
     public GameObject bullet = null;
