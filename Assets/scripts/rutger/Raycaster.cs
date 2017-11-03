@@ -29,6 +29,7 @@ public class Raycaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		print(currentObjVert);
 	   if (Input.GetMouseButtonUp(0)) {
 	   	mousedown = false;
 	   }
@@ -39,6 +40,15 @@ public class Raycaster : MonoBehaviour {
 	             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 	             if (goTerrain.GetComponent<Collider>().Raycast (ray, out hit, 100)) {
 	                  lastObj = Instantiate(traps[currentObjHor].objects[currentObjVert], new Vector3(hit.point.x, hit.point.y + 0.5f, hit.point.z), Quaternion.identity);
+	                  if (lastObj.GetComponent<Trap>() != null) {
+	                  	lastObj.GetComponent<Trap>().difficulty = currentObjVert;
+	                  } else if (lastObj.GetComponent<TurrentController>() != null) {
+	                  	lastObj.GetComponent<TurrentController>().difficulty = currentObjVert;
+	                  } else if (lastObj.GetComponent<LandMineTrap>() != null) {
+	                  	lastObj.GetComponent<LandMineTrap>().difficulty = currentObjVert;
+	                  }  else if (lastObj.GetComponent<DecoyScript>() != null) {
+	                  	lastObj.GetComponent<DecoyScript>().difficulty = currentObjVert;
+	                  }  
 	                  objMat = lastObj.GetComponent<Renderer>().material;
 		    lastObj.GetComponent<Renderer>().material = transMat;
 	             	    mousedown = true;

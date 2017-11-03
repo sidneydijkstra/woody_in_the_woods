@@ -14,7 +14,7 @@ public class ResourceController : MonoBehaviour {
     private GameObject _collectPoint;
 
 	void Start () {
-        _collectPoint = this.transform.FindChild("collect_point").gameObject;
+        _collectPoint = this.transform.Find("collect_point").gameObject;
         _currentResources = maxResources;
 	}
 	

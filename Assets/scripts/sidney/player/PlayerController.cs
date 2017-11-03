@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
     private void playerMovement() {
         if (con.isGrounded) {
             /// teensy controller
-            //moveDirection = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal"));
+          //  moveDirection = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal"));
 
             /// mouse & keyboard controller
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -76,13 +76,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void cameraRotation() {
+        if (Input.GetKeyDown(KeyCode.N)) {
+            Cursor.lockState = CursorLockMode.None;
+        }
         /// teensy controller
         //rotationX += -Input.GetAxis("Horizontal_2") * sensitivityX;
-        //rotationY += -Input.GetAxis("Vertical_2") * sensitivityY;
-        //rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+       // rotationY += -Input.GetAxis("Vertical_2") * sensitivityY;
+       // rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
         /// mouse & keyboard controller
-		rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+        rotationX += Input.GetAxis("Mouse X") * sensitivityX;
         rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
         rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 

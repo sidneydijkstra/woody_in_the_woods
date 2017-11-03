@@ -5,7 +5,7 @@ using UnityEngine;
 public class LandMineTrap : MonoBehaviour {
 	Transform[] array;
 	public bool canExplode;
-	public int difficulty;
+	public float difficulty;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,7 +19,7 @@ public class LandMineTrap : MonoBehaviour {
 		 GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Enemy");
 		    foreach (GameObject child in allObjects) {
 		        float dist = (transform.position - child.transform.position).magnitude;
-		        if (dist < 5.0f * difficulty) {
+		        if (dist < 5.0f) {
 		        	       float force = 750.0f;
 		                     Vector3 dir = child.transform.position - transform.position;
 			         dir = dir.normalized;

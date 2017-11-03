@@ -13,6 +13,7 @@ public class TurrentController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		timer = 0.75f / difficulty;
 		 timer -= Time.deltaTime;
 		 GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Enemy");
 		 float closest = Mathf.Infinity;

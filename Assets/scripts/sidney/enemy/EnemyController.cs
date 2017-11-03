@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour {
     private NavMeshAgent agent;
     private Rigidbody rig;
     private GameObject _player;
+    private bool decoy;
+    private Vector3 destination;
 
     // health vars
     private float currentHealth = 0F;
@@ -59,7 +61,11 @@ public class EnemyController : MonoBehaviour {
         if (hit.collider != null){
             // set rotation
             agent.enabled = true;
-            agent.SetDestination(_player.transform.position);
+            if (decoy) {
+                agent.SetDestination(destination);
+            } else {
+                agent.SetDestination(_player.transform.position);
+            }
             this.transform.LookAt(agent.destination);
 
             // do jump
@@ -68,7 +74,11 @@ public class EnemyController : MonoBehaviour {
         }else if (!agent.enabled && rig.velocity == Vector3.zero){
             // set normal movement
             agent.enabled = true;
-            agent.SetDestination(_player.transform.position);
+             if (decoy) {
+                agent.SetDestination(destination);
+            } else {
+                agent.SetDestination(_player.transform.position);
+            }
         }
 
         // set animal rotation
@@ -117,6 +127,16 @@ public class EnemyController : MonoBehaviour {
             this.expload();
         }
     }
+
+    public void setDestination(Vector3 dest) {
+        destination = dest;
+        decoy = true;
+    }
+
+    public void disableDecoy() {
+        decoy = false;
+    }
+
 
     // get current helth
     public float getCurrentHealth() {

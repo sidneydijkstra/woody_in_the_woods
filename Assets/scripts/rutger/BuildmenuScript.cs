@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BuildmenuScript : MonoBehaviour {
-	public GameObject player;
+	private GameObject player;
 	private Raycaster playerRaycaster;
 	private int currentObj;
 	private int children;
@@ -12,6 +12,7 @@ public class BuildmenuScript : MonoBehaviour {
 	int currentObjHor;
 	// Use this for initialization
 	void Start () {
+		player = GameObject.FindGameObjectWithTag("Player");
 		playerRaycaster = player.GetComponent<Raycaster>();
 		currentObjVert = 0;
 		currentObjHor = 0;
@@ -19,7 +20,6 @@ public class BuildmenuScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-        /*
 		if (playerRaycaster.mousedown) {
 			if (currentObjHor != playerRaycaster.currentObjHor) {
 				currentObjHor = playerRaycaster.currentObjHor;
@@ -58,7 +58,6 @@ public class BuildmenuScript : MonoBehaviour {
 			if (this.gameObject.transform.position.x > Screen.width/2 - Screen.width/10)
 				this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x  - 5, this.gameObject.transform.position.y, 0 );
 		}
-        */
 	}
 	void showImages(bool enable) {
 		children = transform.childCount;
