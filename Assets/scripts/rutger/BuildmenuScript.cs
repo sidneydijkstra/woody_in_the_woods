@@ -26,7 +26,7 @@ public class BuildmenuScript : MonoBehaviour {
 				currentObjVert = 0;
 			}
 			showImages(true);
-			transform.GetChild(children - currentObjHor - 1).GetComponent<RectTransform>().sizeDelta = new Vector2 (100, 100);
+			transform.GetChild(children - currentObjHor - 1).GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width/7.5f, Screen.width/7.5f);
 			int children2 = transform.GetChild(children - currentObjHor - 1).childCount;
 		 		for (int j = 0; j < children2; ++j) {
 		 			transform.GetChild(children - currentObjHor - 1).transform.GetChild(j).GetComponent<Image>().enabled = true;
@@ -41,7 +41,7 @@ public class BuildmenuScript : MonoBehaviour {
 					currentObjVert--;
 				}
 			}
-		transform.GetChild(children - currentObjHor - 1).transform.GetChild(currentObjVert).GetComponent<RectTransform>().sizeDelta = new Vector2 (100, 100);
+		transform.GetChild(children - currentObjHor - 1).transform.GetChild(currentObjVert).GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width/7.5f, Screen.width/7.5f);
 		} else {
 			showImages(false);
 		}
@@ -63,11 +63,11 @@ public class BuildmenuScript : MonoBehaviour {
 		children = transform.childCount;
 		for (int i = 0; i < children; ++i) {
 		 	transform.GetChild(i).GetComponent<Image>().enabled = enable;
-		 	transform.GetChild(i).GetComponent<RectTransform>().sizeDelta = new Vector2 (75, 75);
+		 	transform.GetChild(i).GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width/7.5f, Screen.width/7.5f);
 		 	int children2 = transform.GetChild(i).childCount;
 		 		for (int j = 0; j < children2; ++j) {
 		 			transform.GetChild(i).transform.GetChild(j).GetComponent<Image>().enabled = false;
-		 			transform.GetChild(i).transform.GetChild(j).GetComponent<RectTransform>().sizeDelta = new Vector2 (50, 50);
+		 			transform.GetChild(i).transform.GetChild(j).GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width/10, Screen.width/10);
 		 		}
 		 }
 	}

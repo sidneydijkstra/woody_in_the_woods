@@ -21,6 +21,10 @@ public class ResourceController : MonoBehaviour {
 	void Update () {
 	}
 
+	public float getResources() {
+		return _currentResources;
+	}
+
     // farm resource
     public void hitResource() {
         _currentResources -= resourcesPerHit;

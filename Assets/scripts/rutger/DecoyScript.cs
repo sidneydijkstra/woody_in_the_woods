@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DecoyScript : MonoBehaviour {
-	private bool explosive = true;
+	private bool explosive;
 	private float timer;
 	public float difficulty;
 	// Use this for initialization
@@ -13,9 +13,9 @@ public class DecoyScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (difficulty == 2) {
+		if (difficulty == 3) {
 			explosive = true;
-		} else if (difficulty == 1) {
+		} else if (difficulty == 2) {
 			explosive = false;
 		}
 		timer -= Time.deltaTime;
@@ -53,7 +53,7 @@ public class DecoyScript : MonoBehaviour {
 			         print(dir);
 			         child.GetComponent<Rigidbody>().AddForce(dir*force);
 			         //kill child
-			    //     child.GetComponent<EnemyController>().removeHealth(40);
+			         child.GetComponent<EnemyController>().removeHealth(40);
 		        }
 		    }
 	}

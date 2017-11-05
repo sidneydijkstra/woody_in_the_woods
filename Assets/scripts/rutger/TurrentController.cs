@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class TurrentController : MonoBehaviour {
 	public GameObject bullet;
-	float timer;
+	private float timer;
 	public int difficulty;
 	// Use this for initialization
 	void Start () {
-		timer = 0.5f;
+		//timer = 0.5f;
+		timer = 0.75f / difficulty;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		timer = 0.75f / difficulty;
 		 timer -= Time.deltaTime;
 		 GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Enemy");
 		 float closest = Mathf.Infinity;
@@ -35,7 +35,7 @@ public class TurrentController : MonoBehaviour {
 		}
 		Vector3 targetDir = closestObject.transform.position - transform.position;
 	 	float step = 1.0f * Time.deltaTime;
-		        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+		Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f) + new Vector3(0,90,0);
 		        transform.rotation = Quaternion.LookRotation(newDir);
 	}
 	

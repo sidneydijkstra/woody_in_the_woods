@@ -26,6 +26,7 @@ public class LandMineTrap : MonoBehaviour {
 			         print(dir);
 			         child.GetComponent<Rigidbody>().AddForce(dir*force);
 			         //kill child
+			         child.GetComponent<EnemyController>().removeHealth(40);
 		        }
 		    }
 	}

@@ -24,7 +24,6 @@ public class Raycaster : MonoBehaviour {
 		mousedown = false;
 		currentObjHor = 0;
 		buildmenuscript = buildmenu.GetComponent<BuildmenuScript>();
-		//print("fuck");
 	}
 	
 	// Update is called once per frame
@@ -33,6 +32,27 @@ public class Raycaster : MonoBehaviour {
 	   if (Input.GetMouseButtonUp(0)) {
 	   	mousedown = false;
 	   }
+	   if (lastObj != null && lastObj.GetComponent<Renderer>().material != transMat) {
+		   if (lastObj.GetComponent<Trap>() != null) {
+		                  	lastObj.GetComponent<Trap>().enabled = false;
+		                  } else if (lastObj.GetComponent<TurrentController>() != null) {
+		                  	lastObj.GetComponent<TurrentController>().enabled = false;
+		                  } else if (lastObj.GetComponent<LandMineTrap>() != null) {
+		                  	lastObj.GetComponent<LandMineTrap>().enabled = false;
+		                  }  else if (lastObj.GetComponent<DecoyScript>() != null) {
+		                  	lastObj.GetComponent<DecoyScript>().enabled = false;
+		                  }  
+		} else if (lastObj != null) {
+	              	 if (lastObj.GetComponent<Trap>() != null) {
+		                  	lastObj.GetComponent<Trap>().enabled = true;
+		                  } else if (lastObj.GetComponent<TurrentController>() != null) {
+		                  	lastObj.GetComponent<TurrentController>().enabled = true;
+		                  } else if (lastObj.GetComponent<LandMineTrap>() != null) {
+		                  	lastObj.GetComponent<LandMineTrap>().enabled = true;
+		                  }  else if (lastObj.GetComponent<DecoyScript>() != null) {
+		                  	lastObj.GetComponent<DecoyScript>().enabled = true;
+		                  }  
+	              }
 	   if (Input.GetMouseButtonDown(0)) {
 	             currentObjHor = 0;
 	             currentObjVert = 0;
