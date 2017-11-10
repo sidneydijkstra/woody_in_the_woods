@@ -28,7 +28,7 @@ public class Raycaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(currentObjVert);
+		//print(currentObjVert);
 	   if (Input.GetMouseButtonUp(0)) {
 	   	mousedown = false;
 	   }

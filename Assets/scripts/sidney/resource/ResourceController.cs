@@ -14,15 +14,11 @@ public class ResourceController : MonoBehaviour {
     private GameObject _collectPoint;
 
 	void Start () {
-        _collectPoint = this.transform.Find("collect_point").gameObject;
+        _collectPoint = this.transform.FindChild("collect_point").gameObject;
         _currentResources = maxResources;
 	}
 	
 	void Update () {
-	}
-
-	public float getResources() {
-		return _currentResources;
 	}
 
     // farm resource
@@ -39,6 +35,10 @@ public class ResourceController : MonoBehaviour {
             for (int i = 0; i < childCount; i++){
                 children[i].parent = newTree.transform;
             }
+
+
+            // play sound
+            GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().playAudio("hakken");
 
             Destroy(this.gameObject);
         }

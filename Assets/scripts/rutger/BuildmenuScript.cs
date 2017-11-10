@@ -41,6 +41,18 @@ public class BuildmenuScript : MonoBehaviour {
 					currentObjVert--;
 				}
 			}
+
+            // horizontal
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                if (currentObjHor > 0) {
+                    currentObjHor--;
+				}
+			}
+			if (Input.GetKeyDown(KeyCode.RightArrow)) {
+				if (currentObjHor < 3) {
+                    currentObjHor++;
+				}
+			}
 		transform.GetChild(children - currentObjHor - 1).transform.GetChild(currentObjVert).GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width/7.5f, Screen.width/7.5f);
 		} else {
 			showImages(false);

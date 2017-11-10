@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System;
+
 
 public class AccelerometerController : MonoBehaviour {
 
     SerialPort port;
+    string[] openPorts;
 
     private float x = 0;
     private float y = 0;
@@ -26,10 +29,44 @@ public class AccelerometerController : MonoBehaviour {
     public bool canForward = true;
 
     void Start () {
-        port = new SerialPort("COM5", 9600);    
-        port.ReadTimeout = 2000;
+        // load ports to search
+        int maxPorts = 10; // number of ports search
+        string[] ports = new string[10];
+        for (int i = 0; i < maxPorts; i++) {
+            ports[i] = "COM" + i;
+        }
+
+        // array of open ports
+        ArrayList _openPorts = new ArrayList();
+
+        // search ports
+        for (int i = 0; i < ports.Length; i++){
+            SerialPort testport = new SerialPort(ports[i], 9600);
+            try{
+                // on port open
+                testport.ReadTimeout = 2000;
+                testport.Open();
+                print("opend port: '" + testport.PortName + "'" + " name: " + testport.ToString());
+                _openPorts.Add(testport.PortName); // add open ports to array
+                testport.Close();
+            }catch (System.Exception e){
+                // on error
+                print("could not open port: '" + testport.PortName + "'" + " error: " + e);
+                continue;
+            }
+        }
+
+        // add new found open ports to public open ports array
+        openPorts =  new string[_openPorts.Count];
+        for (int i = 0; i < _openPorts.Count; i++){
+            openPorts[i] = (string)_openPorts[i];
+        }
+
+        port = new SerialPort(openPorts[0], 9600);
         port.Open();
-	}
+
+
+    }
 	
 	void Update () {
         if (!port.IsOpen) {
@@ -37,6 +74,7 @@ public class AccelerometerController : MonoBehaviour {
             return;
         }
 
+       
 
         string[] str = port.ReadLine().Split(","[0]);
         if (str.Length != 6) {

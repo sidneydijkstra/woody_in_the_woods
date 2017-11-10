@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -37,6 +38,9 @@ public class PlayerController : MonoBehaviour {
     CharacterController con;
     Camera cam;
 
+    // flip te controlles
+    private bool _flip = false;
+
     void Start() {
         rig = GetComponent<Rigidbody>();
         con = GetComponent<CharacterController>();
@@ -46,23 +50,56 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
 
         // set health vars
-        this.setHealth(0);
+        this.setHealth(maxHealth);
         regenTimer = Time.time + regenDelay;
+
+        // *********** set options ***********
+
+        // set flip
+        if (PlayerPrefs.GetInt("_flip") == 1) {
+            _flip = true;
+        }else {
+            _flip = false;
+        }
+
+        // set sens
+        float newSens = PlayerPrefs.GetFloat("_sensitive");
+        sensitivityX = newSens;
+        sensitivityY = newSens;
+
+        // set volume
+        if (PlayerPrefs.GetInt("_dosound") == 1)
+            GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().setVolume(PlayerPrefs.GetFloat("_volume") / 10); // do
+        else
+            GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().setVolume(0); // dont
+
+
+        // play sound
+        GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().playAudio("start");
     }
 
     void Update() {
         playerMovement();
         cameraRotation();
         healthRegen();
+
+
+        if (dead && deadTimer < Time.time)
+        {
+            // load dead scene and set playerpref
+            PlayerPrefs.SetFloat("_timeplayed", Time.time);
+            SceneManager.LoadScene(2);
+        }
     }
 
+    // move player
     private void playerMovement() {
         if (con.isGrounded) {
             /// teensy controller
-          //  moveDirection = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal"));
+            moveDirection = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal"));
 
             /// mouse & keyboard controller
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= speed;
@@ -73,34 +110,35 @@ public class PlayerController : MonoBehaviour {
         // add movement
         moveDirection.y -= gravity * Time.deltaTime;
         con.Move(moveDirection * Time.deltaTime);
+        
     }
 
+    // rotate camera
     private void cameraRotation() {
-        if (Input.GetKeyDown(KeyCode.N)) {
-            Cursor.lockState = CursorLockMode.None;
-        }
         /// teensy controller
-        //rotationX += -Input.GetAxis("Horizontal_2") * sensitivityX;
-       // rotationY += -Input.GetAxis("Vertical_2") * sensitivityY;
-       // rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+        rotationX += -Input.GetAxis("Horizontal_2") * sensitivityX;
+        rotationY += -Input.GetAxis("Vertical_2") * sensitivityY;
+        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
         /// mouse & keyboard controller
-        rotationX += Input.GetAxis("Mouse X") * sensitivityX;
-        rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+		//rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+        //rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+        //rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
 
         // add rotation
         transform.localEulerAngles = new Vector3(transform.rotation.y, rotationX, 0);
         cam.transform.localEulerAngles = new Vector3(-rotationY, cam.transform.rotation.x, 0);
     }
 
+    // regen health
     private void healthRegen() {
-        if (regenTimer <= Time.time) {
+        if (regenTimer <= Time.time && !dead) {
             regenTimer = Time.time + regenDelay;
             this.addHealth(regenAmount);
         }
     }
 
+    // add health
     public void addHealth(float _amount) {
         currentHealth += _amount;
         if (currentHealth > maxHealth) {
@@ -108,6 +146,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    // set health
     public void setHealth(float _amount){
         currentHealth = _amount;
         if (currentHealth < 0) {
@@ -118,19 +157,55 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    // remove health
     public void removeHealth(float _amount){
-        if (hitTimer <= Time.time) {
+        if (hitTimer <= Time.time && !dead) {
+            // play sound
+            GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().playAudio("damage");
+
             currentHealth -= _amount;
             hitTimer = hitDelay + Time.time;
             if (currentHealth < 0) {
                 currentHealth = 0;
+                this.kill();
             }
         }
         
     }
 
+    // get current health
     public float getCurrentHealth() {
         return currentHealth;
+    }
+
+    private bool dead = false;
+    private float deadTimer = 0;
+
+    // kill the player
+    public void kill() {
+
+        // play sound
+        GameObject.FindGameObjectWithTag("AUDIOCONTROLLER").GetComponent<AudioController>().playAudio("dood");
+        dead = true;
+        deadTimer = Time.time + 3;
+    }
+
+    // set sens
+    public void setSensitive(float sens) {
+        this.rotationX += sens;
+        this.rotationY += sens;
+
+        print("x: " + this.rotationX + " sens: " + sens);
+
+        if (this.rotationX < 2) {
+            this.rotationX = 2;
+            this.rotationY = 2;
+        }
+
+        if (this.rotationX > 6) {
+            this.rotationX = 6;
+            this.rotationY = 6;
+        }
     }
 
 }

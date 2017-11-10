@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCombatController : MonoBehaviour {
 
     [Header("Axe Config")]
+    public GameObject axeDisplay;
     public GameObject axe;
     public Transform adjectPoint;
 
@@ -13,8 +14,12 @@ public class PlayerCombatController : MonoBehaviour {
 
     private bool trowAxe;
 
+    // axe display and delay
+    private float axeTimer;
+
     // gun timer
     private float fireTimer;
+    private bool isDisplaying = false;
 
     void Start () {
         trowAxe = true;
@@ -26,12 +31,26 @@ public class PlayerCombatController : MonoBehaviour {
 	}
 
     private void axeUpdate() {
+        if (axeTimer > Time.time) {
+            return;
+        }else { 
+}
+
+        if (!isDisplaying) {
+            isDisplaying = true;
+            axeDisplay.SetActive(true);
+        }
+
         // on trow
-        if (this.GetComponent<AccelerometerController>().isForwardAcceleration() && trowAxe || Input.GetKey(KeyCode.Mouse1) && trowAxe) {
+        if (this.GetComponent<AccelerometerController>().isForwardAcceleration() && trowAxe || Input.GetKeyDown(KeyCode.Mouse1) && trowAxe) {
             GameObject obj = Instantiate(axe, adjectPoint.position, this.transform.rotation) as GameObject;
 
             obj.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x, obj.transform.eulerAngles.y, obj.transform.eulerAngles.z);
             obj.GetComponent<Rigidbody>().AddForce(obj.transform.forward * 25, ForceMode.Impulse);
+            axeTimer = Time.time + 1.2f;
+
+            isDisplaying = false;
+            axeDisplay.SetActive(false);
         }
     }
 
@@ -57,6 +76,8 @@ public class PlayerCombatController : MonoBehaviour {
 
             GameObject obj = Instantiate(gun.bullet, gun.barrel.position, gun.barrel.rotation) as GameObject;
             obj.GetComponent<Rigidbody>().AddForce(gun.transform.right * 25, ForceMode.Impulse);
+
+            gun.GetComponent<AudioSource>().Play();
         }
     }
 
